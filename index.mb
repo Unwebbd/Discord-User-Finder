@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Simple Web Page</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to an external CSS file -->
+    <script src="script.js" defer></script> <!-- Link to an external JavaScript file -->
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Web Page</h1>
+    </header>
+    <main>
+        <p>This is a simple web page created with HTML, CSS, and JavaScript.</p>
+        <button id="alertButton">Click Me!</button>
+    </main>
+    <footer>
+        <p>&copy; 2023 My Web Page</p>
+    </footer>
+</body>
+</html>
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class DiscordProfileChecker extends JFrame {
+    private JTextField usernameField;
+    private JTextArea resultArea;
+    private JButton checkButton;
+
+    public DiscordProfileChecker() {
+        // Set up the frame
+        setTitle("Discord Profile Checker");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Create input panel
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new FlowLayout());
+
+        // Create and add components
+        usernameField = new JTextField(20);
+        checkButton = new JButton("Check Status");
+        resultArea = new JTextArea(10, 30);
+        resultArea.setEditable(false);
+
+        inputPanel.add(new JLabel("Enter Discord Username:"));
+        inputPanel.add(usernameField);
+        inputPanel.add(checkButton);
+
+        // Add action listener to the button
+        checkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkUserStatus();
+            }
+        });
+
+        // Add components to the frame
+        add(inputPanel, BorderLayout.NORTH);
+        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+    }
+
+    private void checkUserStatus() {
+        String username = usernameField.getText().trim();
+        if (username.isEmpty() || !username.endsWith("@discord.com")) {
+            resultArea.setText("Please enter a valid Discord username.");
+            return;
+        }
+
+        // Mocking the status and VPN check
+        String status = getMockStatus(username);
+        boolean hasVpn = checkMockVpn(username);
+
+        // Display the results
+        resultArea.setText("Username: " + username + "\n");
+        resultArea.append("Status: " + status + "\n");
+        resultArea.append("VPN Enabled: " + (hasVpn ? "Yes" : "No") + "\n");
+    }
+
+    // Mock method to simulate getting user status
+    private String getMockStatus(String username) {
+        // In a real application, you would call the Discord API here
+        return "Online"; // Mock status
+    }
+
+    // Mock method to simulate VPN check
+    private boolean checkMockVpn(String username) {
+        // In a real application, you would implement actual VPN detection logic
+        return false; // Mock VPN status
+    }
+
+    public static void main(String[] args) {
+        // Run the application
+        SwingUtilities.invokeLater(() -> {
+            DiscordProfileChecker checker = new DiscordProfileChecker();
+            checker.setVisible(true);
+        });
+    }
+}
+
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class DiscordAltAccountDetector {
+
+    // A set of known alt account patterns (for demonstration purposes)
+    private static final HashSet<String> knownAltPatterns = new HashSet<>();
+
+    static {
+        // Add some example patterns that might indicate an alt account
+        knownAltPatterns.add("alt_");
+        knownAltPatterns.add("fake_");
+        knownAltPatterns.add("test_");
+        knownAltPatterns.add("123"); // Example of a numeric pattern
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Prompt user for Discord username
+        System.out.print("Enter Discord username: ");
+        String username = scanner.nextLine();
+
+        // Check if the username is an alt account
+        if (isAltAccount(username)) {
+            System.out.println("The username '" + username + "' is likely an alt account.");
+        } else {
+            System.out.println("The username '" + username + "' appears to be a regular account.");
+        }
+
+        scanner.close();
+    }
+
+    /**
+     * Checks if the provided username matches known alt account patterns.
+     *
+     * @param username The Discord username to check.
+     * @return true if the username is likely an alt account, false otherwise.
+     */
+    private static boolean isAltAccount(String username) {
+        // Check if the username contains any known alt patterns
+        for (String pattern : knownAltPatterns) {
+            if (username.toLowerCase().contains(pattern)) {
+                return true; // Found a match, it's an alt account
+            }
+        }
+        return false; // No matches found, it's not an alt account
+    }
+}
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DiscordUserProfile {
+
+    private static final String DISCORD_API_URL = "https://discord.com/api/v10/users/";
+    private static final String VPN_CHECK_API_URL = "https://api.vpncheck.com/check?ip="; // Example VPN check API
+    private static final String DISCORD_BOT_TOKEN = "YOUR_DISCORD_BOT_TOKEN"; // Replace with your bot token
+
+    public static void main(String[] args) {
+        String username = "exampleUser"; // Replace with the actual username
+        try {
+            String userId = getUserIdByUsername(username);
+            if (userId != null) {
+                String userProfile = getUserProfile(userId);
+                System.out.println("User Profile: " + userProfile);
+                
+                // Assuming you have a way to get the user's IP address
+                String userIp = "USER_IP_ADDRESS"; // Replace with actual user IP
+                boolean isUsingVPN = checkIfUsingVPN(userIp);
+                System.out.println("Is using VPN: " + isUsingVPN);
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import javax.security.auth.login.LoginException;
+
+public class DiscordUserFinder extends ListenerAdapter {
+
+    private final String botToken = "YOUR_BOT_TOKEN"; // Replace with your bot token
+
+    public static void main(String[] args) {
+        try {
+            JDA jda = JDABuilder.createDefault("YOUR_BOT_TOKEN").build(); // Initialize JDA with your bot token
+            jda.addEventListener(new DiscordUserFinder()); // Add the listener
+        } catch (LoginException e) {
+            e.printStackTrace(); // Handle login exceptions
+        }
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        // Check if the message starts with the command prefix
+        if (event.getMessage().getContentRaw().startsWith("!finduser")) {
+            String[] command = event.getMessage().getContentRaw().split(" ");
+            if (command.length < 2) {
+                event.getChannel().sendMessage("Please provide a username.").queue();
+                return;
+            }
+
+            String username = command[1]; // Get the username from the command
+            User user = event.getJDA().getUsersByName(username, true).stream().findFirst().orElse(null);
+
+            if (user != null) {
+                event.getChannel().sendMessage("User found: " + user.getAsTag()).queue();
+            } else {
+                event.getChannel().sendMessage("User not found.").queue();
+            }
+        }
+    }
+}
+
