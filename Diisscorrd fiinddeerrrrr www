@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord User Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        h1 {
+            color: #7289da;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Discord User Checker</h1>
+<p>Enter a Discord username (without the domain)</p>
+<input type="text" id="username" placeholder="Discord Username">
+<button id="checkButton">Check User</button>
+
+<div class="result" id="result" style="display: none;"></div>
+
+<script>
+document.getElementById('checkButton').addEventListener('click', function() {
+    const username = document.getElementById('username').value;
+
+    // Koep assume createSimulation function will return if the user exists and if they are using VPN
+    checkUser(username)
+        .then(userInfo => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h2>User Information</h2>
+                <p>User: ${userInfo.username}</p>
+                <p>VPN Status: ${userInfo.vpnStatus ? 'Using VPN' : 'Not Using VPN'}</p>
+            `;
+        })
+        .catch(error => {
+            alert('Error fetching user information: ' + error.message);
+        });
+});
+
+// Simulated user check - in a real application, you would replace this with an API request
+function checkUser(username) {
+    return new Promise((resolve, reject) => {
+        // Simulate an API call for demonstration purposes
+        setTimeout(() => {
+            if (username) {
+                const userExists = true; // Hardcoded for simulation
+                const usingVPN = Math.random() < 0.5; // Randomly simulating VPN status
+
+                if (userExists) {
+                    resolve({
+                        username: username,
+                        vpnStatus: usingVPN
+                    });
+                } else {
+                    reject(new Error('User not found'));
+                }
+            } else {
+                reject(new Error('Please enter a username'));
+            }
+        }, 1000);
+    });
+}
+</script>
+
+</body>
+</html>
