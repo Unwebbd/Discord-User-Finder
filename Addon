@@ -1,0 +1,81 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class DiscordProfileChecker extends JFrame {
+    private JTextField usernameField;
+    private JTextArea resultArea;
+    private JButton checkButton;
+
+    public DiscordProfileChecker() {
+        // Set up the frame
+        setTitle("Discord Profile Checker");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Create input panel
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new FlowLayout());
+
+        // Create and add components
+        usernameField = new JTextField(20);
+        checkButton = new JButton("Check Status");
+        resultArea = new JTextArea(10, 30);
+        resultArea.setEditable(false);
+
+        inputPanel.add(new JLabel("Enter Discord Username:"));
+        inputPanel.add(usernameField);
+        inputPanel.add(checkButton);
+
+        // Add action listener to the button
+        checkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkUserStatus();
+            }
+        });
+
+        // Add components to the frame
+        add(inputPanel, BorderLayout.NORTH);
+        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+    }
+
+    private void checkUserStatus() {
+        String username = usernameField.getText().trim();
+        if (username.isEmpty() || !username.endsWith("@discord.com")) {
+            resultArea.setText("Please enter a valid Discord username.");
+            return;
+        }
+
+        // Mocking the status and VPN check
+        String status = getMockStatus(username);
+        boolean hasVpn = checkMockVpn(username);
+
+        // Display the results
+        resultArea.setText("Username: " + username + "\n");
+        resultArea.append("Status: " + status + "\n");
+        resultArea.append("VPN Enabled: " + (hasVpn ? "Yes" : "No") + "\n");
+    }
+
+    // Mock method to simulate getting user status
+    private String getMockStatus(String username) {
+        // In a real application, you would call the Discord API here
+        return "Online"; // Mock status
+    }
+
+    // Mock method to simulate VPN check
+    private boolean checkMockVpn(String username) {
+        // In a real application, you would implement actual VPN detection logic
+        return false; // Mock VPN status
+    }
+
+    public static void main(String[] args) {
+        // Run the application
+        SwingUtilities.invokeLater(() -> {
+            DiscordProfileChecker checker = new DiscordProfileChecker();
+            checker.setVisible(true);
+        });
+    }
+}
