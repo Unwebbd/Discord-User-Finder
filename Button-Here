@@ -1,0 +1,50 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+// Main class for the application
+public class MainApplication {
+
+    public static void main(String[] args) {
+        // Create the main frame
+        JFrame mainFrame = new JFrame("Main Application");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(300, 200);
+        mainFrame.setLayout(null);
+
+        // Create a button to navigate to the Discord User Generator
+        JButton navigateButton = new JButton("Go to Discord User Generator");
+        navigateButton.setBounds(50, 70, 200, 30); // Set button position and size
+
+        // Add action listener to the button
+        navigateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Create and show the Discord User Generator window
+                DiscordUserGenerator discordUserGenerator = new DiscordUserGenerator();
+                discordUserGenerator.setVisible(true);
+                mainFrame.dispose(); // Close the main frame
+            }
+        });
+
+        // Add the button to the main frame
+        mainFrame.add(navigateButton);
+        mainFrame.setVisible(true); // Make the main frame visible
+    }
+}
+
+// Class representing the Discord User Generator page
+class DiscordUserGenerator extends JFrame {
+    public DiscordUserGenerator() {
+        // Set up the Discord User Generator frame
+        setTitle("Discord User Generator");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+
+        // Add a label to indicate this is the Discord User Generator page
+        JLabel label = new JLabel("Welcome to the Discord User Generator!");
+        label.setBounds(50, 50, 300, 30);
+        add(label);
+    }
+}
