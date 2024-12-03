@@ -1,0 +1,78 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DiscordUserProfile {
+
+    private static final String DISCORD_API_URL = "https://discord.com/api/v10/users/";
+    private static final String VPN_CHECK_API_URL = "https://api.vpncheck.com/check?ip="; // Example VPN check API
+    private static final String DISCORD_BOT_TOKEN = "YOUR_DISCORD_BOT_TOKEN"; // Replace with your bot token
+
+    public static void main(String[] args) {
+        String username = "exampleUser"; // Replace with the actual username
+        try {
+            String userId = getUserIdByUsername(username);
+            if (userId != null) {
+                String userProfile = getUserProfile(userId);
+                System.out.println("User Profile: " + userProfile);
+                
+                // Assuming you have a way to get the user's IP address
+                String userIp = "USER_IP_ADDRESS"; // Replace with actual user IP
+                boolean isUsingVPN = checkIfUsingVPN(userIp);
+                System.out.println("Is using VPN: " + isUsingVPN);
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getUserIdByUsername(String username) throws Exception {
+        // This method should implement logic to get user ID by username
+        // For simplicity, we assume the username is the same as the user ID
+        return username; // Replace with actual logic to fetch user ID
+    }
+
+    private static String getUserProfile(String userId) throws Exception {
+        URL url = new URL(DISCORD_API_URL + userId);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Authorization", "Bot " + DISCORD_BOT_TOKEN);
+
+        if (conn.getResponseCode() == 200) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            return response.toString();
+        } else {
+            throw new Exception("Failed to fetch user profile: " + conn.getResponseMessage());
+        }
+    }
+
+    private static boolean checkIfUsingVPN(String ip) throws Exception {
+        URL url = new URL(VPN_CHECK_API_URL + ip);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+
+        if (conn.getResponseCode() == 200) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            // Parse the response to determine if the user is using a VPN
+            // This is a placeholder; actual implementation will depend on the VPN check API response format
+            return response.toString().contains("vpn"); // Example condition
+        } else {
+            throw new Exception("Failed to check VPN status: " + conn.getResponseMessage());
+        }
+    }
+}
