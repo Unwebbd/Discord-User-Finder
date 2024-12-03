@@ -1,0 +1,53 @@
+To create a Java program that detects if a Discord user is an alt account, we need to define what criteria we will use to identify an alt account. Common methods include checking for similarities in usernames, account creation dates, or IP addresses. However, for this example, we will focus on a simple approach: checking if the username contains certain patterns or if it matches a known list of alt accounts.
+
+Here's a simple Java program that demonstrates this concept:
+
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class DiscordAltAccountDetector {
+
+    // A set of known alt account patterns (for demonstration purposes)
+    private static final HashSet<String> knownAltPatterns = new HashSet<>();
+
+    static {
+        // Add some example patterns that might indicate an alt account
+        knownAltPatterns.add("alt_");
+        knownAltPatterns.add("fake_");
+        knownAltPatterns.add("test_");
+        knownAltPatterns.add("123"); // Example of a numeric pattern
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Prompt user for Discord username
+        System.out.print("Enter Discord username: ");
+        String username = scanner.nextLine();
+
+        // Check if the username is an alt account
+        if (isAltAccount(username)) {
+            System.out.println("The username '" + username + "' is likely an alt account.");
+        } else {
+            System.out.println("The username '" + username + "' appears to be a regular account.");
+        }
+
+        scanner.close();
+    }
+
+    /**
+     * Checks if the provided username matches known alt account patterns.
+     *
+     * @param username The Discord username to check.
+     * @return true if the username is likely an alt account, false otherwise.
+     */
+    private static boolean isAltAccount(String username) {
+        // Check if the username contains any known alt patterns
+        for (String pattern : knownAltPatterns) {
+            if (username.toLowerCase().contains(pattern)) {
+                return true; // Found a match, it's an alt account
+            }
+        }
+        return false; // No matches found, it's not an alt account
+    }
+}
